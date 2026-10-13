@@ -1,0 +1,20 @@
+name: Build exe
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: BalckJack
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install pyinstaller pillow
+      - run: pyinstaller --onefile --noconsole --add-data "cards;cards" --add-data "cards.json;." game.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: game-exe
+          path: BalckJack/dist/game.exe
